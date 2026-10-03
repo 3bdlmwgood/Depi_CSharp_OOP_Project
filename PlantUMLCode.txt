@@ -1,0 +1,178 @@
+@startuml ExamSystem
+
+skinparam backgroundColor white
+skinparam classBackgroundColor white
+skinparam classBorderColor black
+skinparam classFontColor black
+skinparam ArrowColor black
+skinparam shadowing false
+
+title Examination System - Class Diagram
+
+
+' =========================
+' Interfaces
+' =========================
+
+interface ICloneable {
+    +Clone() : object
+}
+
+interface "IComparable<T>" as IComparable {
+    +CompareTo(T other) : int
+}
+
+
+' =========================
+' Answer
+' =========================
+
+class Answer {
+    +int Id
+    +string Text
+
+    +Answer()
+    +Answer(int answerId, string answerText)
+    +ToString() : string
+}
+
+
+' =========================
+' Questions
+' =========================
+
+abstract class Question {
+    +string Header
+    +string Body
+    +double Mark
+    +List<Answer> AnswerList
+    +Answer RightAnswer
+
+    +Question()
+    +Question(...)
+    +Clone() : object
+    +CompareTo(Question other) : int
+    +ToString() : string
+}
+
+class MCQQuestion {
+    +MCQQuestion()
+    +MCQQuestion(...)
+    +ToString() : string
+}
+
+class TrueFalseQuestion {
+    +TrueFalseQuestion()
+    +TrueFalseQuestion(...)
+    +ToString() : string
+}
+
+
+' =========================
+' Exam
+' =========================
+
+enum enExamType {
+    Final
+    Practical
+}
+
+abstract class Exam {
+    +int TimeOfExam
+    +int NumberOfQuestions
+    +enExamType ExamType
+    +List<Question> Questions
+
+    +Exam()
+    +Exam(...)
+    +ShowExam() : void
+    +Clone() : object
+    +CompareTo(Exam other) : int
+    +ToString() : string
+}
+
+class FinalExam {
+    +FinalExam()
+    +FinalExam(...)
+    +ShowExam() : void
+    +ToString() : string
+}
+
+class PracticalExam {
+    +PracticalExam()
+    +PracticalExam(...)
+    +ShowExam() : void
+    +ToString() : string
+}
+
+
+' =========================
+' Subject
+' =========================
+
+class Subject {
+    +int SubjectId
+    +string SubjectName
+    +Exam Exam
+
+    +Subject()
+    +Subject(int subjectId, string subjectName)
+    +CreateExam(...) : Exam
+    +ToString() : string
+}
+
+
+' =========================
+' Inheritance
+' =========================
+
+Question <|-- MCQQuestion
+Question <|-- TrueFalseQuestion
+
+Exam <|-- FinalExam
+Exam <|-- PracticalExam
+
+
+' =========================
+' Interfaces
+' =========================
+
+ICloneable <|.. Question
+ICloneable <|.. Exam
+
+IComparable <|.. Question
+IComparable <|.. Exam
+
+
+' =========================
+' Relationships
+' =========================
+
+Question "1" *-- "2..*" Answer : AnswerList
+Question "1" --> "1" Answer : RightAnswer
+
+Exam "1" o-- "1..*" Question : Questions
+
+Subject "1" --> "0..1" Exam : Exam
+
+Subject ..> enExamType : creates
+
+
+' =========================
+' Exam Question Types
+' =========================
+
+FinalExam ..> TrueFalseQuestion : accepts
+FinalExam ..> MCQQuestion : accepts
+
+PracticalExam ..> MCQQuestion : accepts
+
+
+' =========================
+' Layout
+' =========================
+
+MCQQuestion -[hidden]-> TrueFalseQuestion
+FinalExam -[hidden]-> PracticalExam
+
+@enduml

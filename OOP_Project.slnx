@@ -1,4 +1,8 @@
 <Solution>
+  <Folder Name="/Class Diagram/">
+    <File Path="../../../Downloads/Class Diagram.png" />
+    <File Path="PlantUMLCode.txt" />
+  </Folder>
   <Project Path="OOP_Project Tests/OOP_Project Tests.csproj" />
   <Project Path="OOP_Project/OOP_Project.csproj" />
 </Solution>
